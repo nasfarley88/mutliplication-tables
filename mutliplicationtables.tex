@@ -1,0 +1,25 @@
+\documentclass{article}
+
+\usepackage[table]{xcolor}
+\usepackage{luacode}
+\usepackage{array}
+
+% Stacked from http://tex.stackexchange.com/questions/41758/how-can-i-reproduce-this-table-with-thick-lines#41761
+\makeatletter
+\newcommand{\thickhline}{%
+    \noalign {\ifnum 0=`}\fi \hrule height 1pt
+    \futurelet \reserved@a \@xhline
+}
+\newcolumntype{"}{@{\hskip\tabcolsep\vrule width 1pt\hskip\tabcolsep}}
+\makeatother
+\newcolumntype{Q}{>{\centering\arraybackslash}m{0.5cm}}
+
+\luadirect{dofile("mutliplicationtables.lua")}
+\newcommand*{\mtableblank}[2]{\luadirect{mtable({#1}, {#2}, true)}}
+\newcommand*{\mtable}[2]{\luadirect{mtable({#1}, {#2})}}
+
+\begin{document}
+\renewcommand{\arraystretch}{1.9}
+\noindent\mtableblank{2,7,6,4,0,12,5,3,11,9}{4,4,4,4,4,4,4,4,4,4}\\
+\mtable{2,7,6,4,0,12,5,3,11,9}{4,4,4,4,4,4,4,4,4,4}
+\end{document}
