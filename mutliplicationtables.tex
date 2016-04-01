@@ -3,6 +3,12 @@
 \usepackage[table]{xcolor}
 \usepackage{luacode}
 \usepackage{array}
+\usepackage{tikz}
+\usepackage{unicode-math}
+
+\setmathfont[Scale=1.3]{Free Sans}
+\setmainfont[Scale=1.3]{Free Sans}
+
 
 % Stacked from http://tex.stackexchange.com/questions/41758/how-can-i-reproduce-this-table-with-thick-lines#41761
 \makeatletter
@@ -12,14 +18,18 @@
 }
 \newcolumntype{"}{@{\hskip\tabcolsep\vrule width 1pt\hskip\tabcolsep}}
 \makeatother
-\newcolumntype{Q}{>{\centering\arraybackslash}m{0.5cm}}
+\newcolumntype{Q}{>{\centering\arraybackslash\(}m{0.5cm}<{\)}}
 
 \luadirect{dofile("mutliplicationtables.lua")}
-\newcommand*{\mtableblank}[2]{\luadirect{mtable({#1}, {#2}, true)}}
-\newcommand*{\mtable}[2]{\luadirect{mtable({#1}, {#2})}}
+\newcommand*{\mtableblank}[2]{\luadirect{mtableWithTikz({#1}, {#2}, true)}}
+\newcommand*{\mtable}[2]{\luadirect{mtableWithTikz({#1}, {#2})}}
+\newcommand*{\mtablelarge}[2]{\luadirect{mtableWithTikz({#1}, {#2}, false, 1.4, -1.4)}}
+% \newcommand*{\mtabletikz}[2]{\luadirect{mtableWithTikz({#1}, {#2})}}
 
 \begin{document}
 \renewcommand{\arraystretch}{1.9}
 \noindent\mtableblank{2,7,6,4,0,12,5,3,11,9}{4,4,4,4,4,4,4,4,4,4}\\
-\mtable{2,7,6,4,0,12,5,3,11,9}{4,4,4,4,4,4,4,4,4,4}
+\mtable{2,7,6,4,0,12,5,3,11,9}{4,4,4,4,4,4,4,4,4,4}\\
+\mtablelarge{2,7,6,4,0,12,5,3,11,100}{4,4,4,4,4,4,4,4,4,100}
+% \mtabletikz{2,7,6,4,0,12,5,3,11,9}{4,4,4,4,4,4,4,4,4,4}
 \end{document}
