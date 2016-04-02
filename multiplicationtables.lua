@@ -1,54 +1,4 @@
 -- Default for blankValues is false
-function mtable (xTable, yTable, blankValues, useColor)
-  -- TODO add check that yTable is not empty
-
-  if #xTable ~= 10 then
-    error("There are not 10 numbers in your x list.")
-  end
-  if #yTable ~= 10 then
-    error("There are not 10 numbers in your y list.")
-  end
-
-  -- Begin table
-  tex.print( [[ \begin{tabular}{Q"Q|Q|Q|Q|Q|Q|Q|Q|Q|Q} ]] )
-  for i=0,10 do
-    if i==0 then
-      tex.print( [[\times]] )
-    else
-      if i % 2 == 1 and useColor then
-        tex.print([[\cellcolor{gray!20} ]])
-      end
-      tex.print(yTable[i])
-    end
-    for j=1,10 do
-      -- Always create the &
-      tex.print([[& ]])
-      if i % 2 == 1 and j % 2 == 1 and useColor then
-        tex.print([[\cellcolor{gray!40} ]])
-      elseif (i % 2 == 1 or j % 2 == 1) and useColor then
-        tex.print([[\cellcolor{gray!20} ]])
-      end
-      -- first row? print the actual values
-      if i==0 then
-        tex.print(xTable[j])
-      else
-        -- Should be blank? do nothing. Otherwise, fill the answers
-        if blankValues then
-        else
-          tex.print(xTable[j]*yTable[i])
-        end
-      end
-    end
-    if i==0 then
-      tex.print( [[\\\thickhline]] )
-    elseif i==10 then
-    else
-      tex.print( [[\\\hline]])
-    end
-  end
-  tex.print([[\end{tabular}]])
-end
-
 function drawLine(x1, y1, x2, y2, lineOptions)
   tex.print( [[ \draw[ ]] .. (lineOptions or "") .. "] (" .. x1 .. "," .. y1 .. ") -- (" .. x2 .. "," .. y2 .. ");")
 end
@@ -61,21 +11,21 @@ end
 function mtableWithTikz(xTable, yTable, blankValues, xScale, yScale)
   -- TODO add check that yTable is not empty
 
-  if #xTable ~= 10 then
-    error("There are not 10 numbers in your x list.")
-  end
-  if #yTable ~= 10 then
-    error("There are not 10 numbers in your y list.")
-  end
+  -- if #xTable ~= 10 then
+  --   error("There are not 10 numbers in your x list.")
+  -- end
+  -- if #yTable ~= 10 then
+  --   error("There are not 10 numbers in your y list.")
+  -- end
 
-  -- Begin table
-  tex.print( [[ \begin{tikzpicture}[y=]] 
-      .. (yScale or -1) .. [[cm,x=]] 
-      .. (xScale or 1) .. [[cm] ]] )
-  -- drawText(0.5, 0.5, [[$\times$]])
+  tex.print( [[ \begin{tikzpicture}]]
+      .. "[y=" .. yScale .. [[,x=]] .. xScale .. [[] ]]
+  )
+
   timesSize = 0.15
   drawLine(0.5-timesSize, 0.5-timesSize, 0.5+timesSize, 0.5+timesSize, "very thick")
   drawLine(0.5-timesSize, 0.5+timesSize, 0.5+timesSize, 0.5-timesSize, "very thick")
+
   for x=1,#xTable do
     drawText(x+.5, 0.5, xTable[x])
   end
@@ -86,14 +36,14 @@ function mtableWithTikz(xTable, yTable, blankValues, xScale, yScale)
   for x=1,#xTable do
     for y=1,#yTable do
       if x==1 then
-        drawLine(x, 0, x, #xTable+1, "very thick")
+        drawLine(x, 0, x, #yTable+1, "very thick")
       else
-        drawLine(x, 0, x, #xTable+1)
+        drawLine(x, 0, x, #yTable+1)
       end
       if y==1 then
-        drawLine(0, y, #yTable+1, y, "very thick")
+        drawLine(0, y, #xTable+1, y, "very thick")
       else
-        drawLine(0, y, #yTable+1, y)
+        drawLine(0, y, #xTable+1, y)
       end
 
       -- The multiplication
