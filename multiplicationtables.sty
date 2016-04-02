@@ -1,0 +1,32 @@
+% this is my first package
+% 
+% (c) Nathanael Farley
+%
+%% This program can be redistributed and/or modified under the terms
+%% of the LaTeX Project Public License Distributed from CTAN archives
+%% in directory macros/latex/base/lppl.txt.
+% 
+% TODO change to CC-0
+\NeedsTeXFormat{LaTeX2e}[1994/06/01]
+\ProvidesPackage{multiplicationtables}
+  [2011/01/11 v0.01 LaTeX package for my own purpose]
+
+\RequirePackage{tikz}
+\RequirePackage{luacode}
+\RequirePackage{xparse}
+
+\luadirect{dofile("multiplicationtables.lua")}
+\NewDocumentCommand{\mtable}{soomm}{
+  \luadirect{mtableWithTikz({#4}, {#5},
+    \IfBooleanTF{#1}{true}{false},
+    \IfValueTF{#2}{"#2"}{"1.0cm"},
+    \IfValueTF{#3}{"-#3"}{"-1.0cm"}
+    )
+  }
+}
+\newcommand*{\mtableblank}[2]{\mtable*{#1}{#2}}
+\newcommand*{\mtablelarge}[2]{\mtable[1.4cm][1.4cm]{#1}{#2}}
+
+\endinput
+%%
+%% End of file `mypackage.sty'.
